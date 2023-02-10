@@ -31,6 +31,9 @@ class Graph:
         dist: numeric (int or float), optional
             Distance between node1 and node2 on the edge. Default is 1.
         """
+        self.graph[node1] = (node2, power_min, dist)
+        self.graph[node2] = (node1, power_min, dist)
+        return 
         raise NotImplementedError
     
 
@@ -76,4 +79,17 @@ def graph_from_file(filename):
     G: Graph
         An object of the class Graph with the graph from file_name.
     """
+    f = open("filename", "r")
+    line = f.readline()
+    chara = line.split()
+    nb_nodes = chara[0]
+    nb_edges = chara[1]
+    nodes = [n+1 for n in range(nb_nodes)]
+    graph = Graph(nodes)
+    for i in range nb_edges :
+        line = f.readline()
+        chara = line.split()
+        graph.add_edge(chara[0], chara[1], chara[2])
+    f.close()
+    return graph
     raise NotImplementedError
