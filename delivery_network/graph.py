@@ -42,7 +42,7 @@ class Graph:
         raise NotImplementedError
     
 
-    def connected_components(self):
+    def connected_components(self) :
         raise NotImplementedError
 
 
