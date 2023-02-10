@@ -33,6 +33,7 @@ class Graph:
         """
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
+        self.nb_edges += 1
         return 
         raise NotImplementedError
     
@@ -82,14 +83,14 @@ def graph_from_file(filename):
     f = open(filename, "r") #ouvre le fichier
     line = f.readline() #lit la première ligne
     chara = line.split() #on récupère les nombres écrit sur la ligne
-    nb_nodes = chara[0]
-    nb_edges = chara[1]
+    nb_nodes = int(chara[0])
+    nb_edges = int(chara[1])
     nodes = [n+1 for n in range(nb_nodes)]
     graph = Graph(nodes)
     for i in range(nb_edges) : #on boucle sur les arêtes pour les ajouter
         line = f.readline()
         chara = line.split()
-        graph.add_edge(chara[0], chara[1], chara[2])
+        graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]))
     f.close()
     return graph
     raise NotImplementedError
