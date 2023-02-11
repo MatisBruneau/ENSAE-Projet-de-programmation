@@ -39,6 +39,11 @@ class Graph:
     
 
     def get_path_with_power(self, src, dest, power):
+        same_component = 0
+        for e in self.connected_components_set() :
+            if (src in e) and (dest in e) : same_component = 1
+        if same_component == 0 : return None
+        
         raise NotImplementedError
     
 
