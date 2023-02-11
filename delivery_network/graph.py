@@ -51,10 +51,7 @@ class Graph:
         unique_values = set(nodes_component) #on regarde les composantes qui restent à la fin
         components = {}
         for u in unique_values :
-            components[u] = []
-            for n in self.nodes :
-                if nodes_component[n-1] == u :
-                    components[u].append(n)
+            components[u] = [n+1 for (n, component) in enumerate(nodes_component) if component == u ]
         return components.values()
         raise NotImplementedError
 
