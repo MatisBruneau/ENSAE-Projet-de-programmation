@@ -43,7 +43,11 @@ class Graph:
         for e in self.connected_components_set() :
             if (src in e) and (dest in e) : same_component = 1
         if same_component == 0 : return None
+        path = [src]
+        access_nodes = {}
+        access_nodes[src] = [e[0] for e in self.graph[src] if e[1] <= power]
         
+        return path
         raise NotImplementedError
     
 
