@@ -43,6 +43,19 @@ class Graph:
     
 
     def connected_components(self) :
+        nodes_component = [n for n in self.nodes] #initialisation d'une liste contenant les components de chaque node
+        for n in range(self.nb_nodes) : #on parcourt les nodes
+            for e in self.graph[n+1] : #pour chaque node on regarde ses arêtes
+                nodes_component[e[0]-1] = min(nodes_component[n], nodes_component[e[0]-1]) #on place les deux nodes dans la même composante (en choisissant la minimum)
+                nodes_component[n] = min(nodes_component[n], nodes_component[e[0]-1])
+        unique_values = set(nodes_component) #on regarde les composantes qui restent à la fin
+        components = {}
+        for u in unique_values :
+            components[u] = []
+            for n in self.nodes :
+                if nodes_component[n-1] == u :
+                    components[u].append(n)
+        return components.values()
         raise NotImplementedError
 
 
