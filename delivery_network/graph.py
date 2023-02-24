@@ -52,9 +52,9 @@ class Graph:
         for e in self.graph[src]:
             s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
 
-        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer):
-            s_min = min(s_a_explorer, key = s_a_explorer.get)
-            puissance_s_min, precedent_s_min = s_a_explorer[s_min]
+        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer): #tant qu'il reste des sommets à explorer
+            s_min = min(s_a_explorer, key = s_a_explorer.get) #on sélectionne le sommet connecté à la source avec la puissance minimale
+            puissance_s_min, precedent_s_min = s_a_explorer[s_min] #on retient la puissance min et le parent
             for successeur in [e[0] for e in self.graph[s_min]]:
                 if successeur in s_a_explorer:
                     puissance = max(puissance_s_min, e[1])
@@ -68,6 +68,8 @@ class Graph:
         else :
             return None 
         raise NotImplementedError
+
+# Voir algo BFS
 
     def get_path_with_power2(self, src, dest, power):
         same_component = 0
