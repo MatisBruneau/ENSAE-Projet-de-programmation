@@ -64,7 +64,7 @@ class Graph:
             s_explore[s_min] = [longueur_s_min, s_explore[precedent_s_min][1] + [s_min]]
             del s_a_explorer[s_min]          
 
-        return s_explore[dest]
+        if s_explore[dest][0] =< p
         raise NotImplementedError
     
 
