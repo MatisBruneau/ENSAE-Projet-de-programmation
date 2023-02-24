@@ -46,23 +46,25 @@ class Graph:
                 nodes_in_components = [n for n in e]
         if same_component == 0 : return None
         
-        inf = sum(sum(self.graph[n][i][1] for i in self.graph[n] for n in nodes_in_components)) + 1 #on utilise un majorant de la somme des puissances comme inf
+        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
         s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [longueur, plus court chemin]
         s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
 
-        for e in self.graph[src]
+        for e in self.graph[src]:
             s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
 
         while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer):
             s_min = min(s_a_explorer, key = s_a_explorer.get)
             longueur_s_min, precedent_s_min = s_a_explorer[s_min]
+            for successeur in [e[0] for e in self.graph[s_min]]:
+                if successeur in s_a_explorer:
+                    dist = longueur_s_min + e[1]
+                    if dist < s_a_explorer[successeur][0]:
+                        s_a_explorer[successeur] = [dist, s_min]
+            s_explore[s_min] = [longueur_s_min, s_explore[precedent_s_min][1] + [s_min]]
+            del s_a_explorer[s_min]          
 
-
-
-        
-
-        
-        return path
+        return s_explore[dest]
         raise NotImplementedError
     
 
