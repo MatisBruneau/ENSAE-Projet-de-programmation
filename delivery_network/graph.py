@@ -41,27 +41,42 @@ class Graph:
     def get_path_with_power(self, src, dest, power):
         same_component = 0
         for e in self.connected_components_set() :
-            if (src in e) and (dest in e) : same_component = 1
+            if (src in e) and (dest in e) : 
+                same_component = 1
+                nodes_in_components = [n for n in e]
         if same_component == 0 : return None
-        path = [src]
-        access_nodes = {}
-        access_nodes[src] = [e[0] for e in self.graph[src] if e[1] <= power]
+        
+        inf = sum(sum(self.graph[n][i][1] for i in self.graph[n] for n in nodes_in_components)) + 1 #on utilise un majorant de la somme des puissances comme inf
+        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [longueur, plus court chemin]
+        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
+
+        for e in self.graph[src]
+            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
+
+        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer):
+            s_min = min(s_a_explorer, key = s_a_explorer.get)
+            longueur_s_min, precedent_s_min = s_a_explorer[s_min]
+
+
+
+        
+
         
         return path
         raise NotImplementedError
     
 
     def connected_components(self) :
-        nodes_component = [n for n in self.nodes] #initialisation d'une liste contenant les components de chaque node
+        nodes_component = [n for n in self.nodes] #initialisation d'une liste contenant les components de chaque node (la position i contient la composante du noeud i)
         for n in range(self.nb_nodes) : #on parcourt les nodes
             for e in self.graph[n+1] : #pour chaque node on regarde ses arêtes
-                nodes_component[e[0]-1] = min(nodes_component[n], nodes_component[e[0]-1]) #on place les deux nodes dans la même composante (en choisissant la minimum)
+                nodes_component[e[0]-1] = min(nodes_component[n], nodes_component[e[0]-1]) #on place les deux nodes dans la même composante (en choisissant le minimum)
                 nodes_component[n] = min(nodes_component[n], nodes_component[e[0]-1])
-        unique_values = set(nodes_component) #on regarde les composantes qui restent à la fin
-        components = {}
-        for u in unique_values :
-            components[u] = [n+1 for (n, component) in enumerate(nodes_component) if component == u ]
-        return components.values()
+        unique_values = set(nodes_component) #on regarde les composantes qui restent après avoir parcourut tout les noeuds
+        components = {} #on va stocker les composantes dans un dictionnaire
+        for u in unique_values : #on parcourt les composantes
+            components[u] = [n+1 for (n, component) in enumerate(nodes_component) if component == u] #on retrouve les noeuds dans la composante u
+        return components.values() #on revoit les listes contenant les noeuds des composantes
         raise NotImplementedError
 
 
