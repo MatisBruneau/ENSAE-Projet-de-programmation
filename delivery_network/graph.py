@@ -213,7 +213,7 @@ def graph_from_file(filename):
     for i in range(nb_edges) : #on boucle sur les arêtes pour les ajouter
         line = f.readline()
         chara = line.split()
-        graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]))
+        graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]), int(chara[3]))
     f.close()
     return graph
     raise NotImplementedError
