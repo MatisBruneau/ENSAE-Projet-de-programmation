@@ -222,7 +222,7 @@ class Graph:
         
         return None
 
-
+#calculer la puissance nécessaire
 
 
 
