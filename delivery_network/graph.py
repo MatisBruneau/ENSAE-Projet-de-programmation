@@ -130,13 +130,18 @@ class Graph:
         """
         raise NotImplementedError
 
+
+
+
+
+
         #TP2
     def transfor(self): #on a besoin de représenter le graphe par des listes pour pouvoir le trier
         G=[]
         for node in self.graph:
             liste_clé = self.graph[node]
             for arrete in liste_clé:
-                G.append((node,arrete[0],arrete[1])) #on implémente le noeud de départ, d'arrivée, la puissance min
+                G.append((node,arrete[0],arrete[1],arrete[2])) #on implémente le noeud de départ, d'arrivée, la puissance min
         return G
 
 
@@ -188,7 +193,36 @@ class Graph:
                 self.union(parent, taille, x, y)
                 KR.append(arrete)
 
-        return KR
+
+        #Transformation de la liste obtenue en graphe
+        KR_nodes=set()
+        for arrete in KR: #on a besoin d'une liste de noeuds pour créer un graphe
+            KR_nodes.add(arrete[0])
+            KR_nodes.add(arrete[1])
+        KR_nodes=list(KR_nodes)
+        KRUSKAL = Graph(KR_nodes)
+        for arrete in KR : #on boucle sur les arêtes pour les ajouter
+            KRUSKAL.add_edge(arrete[0], arrete[1], arrete[2], arrete[3])
+
+        return KRUSKAL
+
+    def dfs(self, src, dest, chemin=[]):
+        """
+        DFS dans l'arbre obtenu par l'algo de Kruskal
+        """
+        chemin.append(src)
+        if src == dest:
+            return chemin #La destination est atteinte
+        for enfant in self.graph[src]:
+            enfant=enfant[0] #on ne prend que la destination de l'arrête
+            if enfant not in chemin:
+                nouveau_chemin= self.dfs(enfant, dest, chemin)
+                if nouveau_chemin is not None:
+                    return nouveau_chemin
+        
+        return None
+
+
 
 
 
@@ -224,7 +258,7 @@ def graph_from_file(filename):
     for i in range(nb_edges) : #on boucle sur les arêtes pour les ajouter
         line = f.readline()
         chara = line.split()
-        graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]))
+        graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]), int(chara[3]))
     f.close()
     return graph
     raise NotImplementedError
