@@ -114,13 +114,23 @@ class Graph:
         return components.values() #on revoit les listes contenant les noeuds des composantes
         raise NotImplementedError
 
+    def connected_components2(self):
+        components = []
+        visited = [0] * len(self.nodes)
+        for n in self.nodes:
+            if not visited[n-1]:
+                print(n)
+                components.append(self.explore(n))
+                for v in components[-1]: 
+                    visited[v-1] = 1     
+        return components
 
     def connected_components_set(self):
         """
         The result should be a set of frozensets (one per component), 
         For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
         """
-        return set(map(frozenset, self.connected_components()))
+        return set(map(frozenset, self.connected_components2()))
     
     def min_power(self, src, dest):
         """
@@ -128,6 +138,16 @@ class Graph:
         """
         raise NotImplementedError
 
+    def explore(self, v, visited = None):
+        if visited == None:
+            visited = [0] * len(self.nodes) # on créé une liste
+        visited[v-1] = 1 # on indique que l'origine a été visitée
+
+        for e in self.graph[v]: # pour toutes les arêtes partant de v
+            if not visited[e[0]-1]: # si le deuxième node n'a pas été visité
+                self.explore(e[0], visited) # on repart en exploration dans le node qu'on a pas exploré, en ne perdant pas la trace des noeud visité
+        
+        return [n for n in self.nodes if visited[n-1]]
 
 def graph_from_file(filename):
     """
