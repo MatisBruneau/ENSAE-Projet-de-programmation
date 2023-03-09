@@ -70,6 +70,15 @@ class Graph:
         raise NotImplementedError
 
 # Voir algo BFS
+    def get_path_with_power1(self, src, dest, power):
+        result = self.min_power(src, dest)
+        if result[0] <= power:
+            return result
+        else :
+            return None
+
+        raise NotImplementedError
+
 
     def get_path_with_power2(self, src, dest, power):
         same_component = 0
@@ -119,7 +128,6 @@ class Graph:
         visited = [0] * len(self.nodes)
         for n in self.nodes:
             if not visited[n-1]:
-                print(n)
                 components.append(self.explore(n))
                 for v in components[-1]: 
                     visited[v-1] = 1     
@@ -136,6 +144,32 @@ class Graph:
         """
         Should return path, min_power. 
         """
+        same_component = 0
+        for e in self.connected_components_set() :
+            if (src in e) and (dest in e) : 
+                same_component = 1
+                nodes_in_components = [n for n in e]
+        if same_component == 0 : return None
+        
+        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
+        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
+        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
+
+        for e in self.graph[src]:
+            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
+
+        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer): #tant qu'il reste des sommets à explorer
+            s_min = min(s_a_explorer, key = s_a_explorer.get) #on sélectionne le sommet connecté à la source avec la puissance minimale
+            puissance_s_min, precedent_s_min = s_a_explorer[s_min] #on retient la puissance min et le parent
+            for successeur in [e[0] for e in self.graph[s_min]]:
+                if successeur in s_a_explorer:
+                    puissance = max(puissance_s_min, e[1])
+                    if puissance < s_a_explorer[successeur][0]:
+                        s_a_explorer[successeur] = [puissance, s_min]
+            s_explore[s_min] = [puissance_s_min, s_explore[precedent_s_min][1] + [s_min]]
+            del s_a_explorer[s_min]
+
+        return s_explore[dest]
         raise NotImplementedError
 
     def explore(self, v, visited = None):
