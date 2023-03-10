@@ -74,7 +74,7 @@ class Graph:
 # Voir algo BFS
     def get_path_with_power(self, src, dest, power):
         result = self.min_power(src, dest)
-        if result[0] <= power:
+        if result[1] <= power:
             return result[1]
         else :
             return None
@@ -90,7 +90,7 @@ class Graph:
                 nodes_in_components = [n for n in e]
         if same_component == 0 : return None
         
-        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
+        inf = float("inf") #on utilise un majorant de la somme des puissances comme inf
         s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
         s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
 
