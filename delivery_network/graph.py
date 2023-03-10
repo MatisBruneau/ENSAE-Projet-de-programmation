@@ -260,7 +260,7 @@ class Graph:
 
         return KRUSKAL
 
-    def dfs(self, src, dest, chemin=[], puissance_min=0):
+    def dfs(self, src, dest, chemin = [], puissance_min=0):
         """
         DFS dans l'arbre obtenu par l'algo de Kruskal
         """
@@ -274,7 +274,7 @@ class Graph:
             if enfant_noeud not in chemin:
                 nouveau_chemin, puissance_min= self.dfs(enfant_noeud, dest, chemin, nouvelle_puissance_min)
                 if nouveau_chemin is not None:
-                    return nouveau_chemin, puissance_min
+                    return nouveau_chemin, max(nouvelle_puissance_min, puissance_min)
         chemin.pop()
         return None,0
 
@@ -328,8 +328,10 @@ def routes(graphe_path, route_path):
     f = open(route_path, "r")
     h = open("/home/onyxia/work/ENSAE-Projet-de-programmation/output/route.x.out", "w")
     nb_route = f.readline()
-    for i in range(int(nb_route)):
+    for i in range(int(nb_route) - 1):
         line = f.readline().split()
-        h.write(str(kruskal.dfs(line[0], line[1])[1]) + "\n")
+        src = int(line[0])
+        dest = int(line[1])
+        h.write(str(kruskal.dfs(src, dest, [])[1]) + "\n")
     f.close()
     h.close()
