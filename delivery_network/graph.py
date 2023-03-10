@@ -37,7 +37,7 @@ class Graph:
         return 
         raise NotImplementedError
     
-    def get_path_with_power(self, src, dest, power):
+    def get_path_with_power1(self, src, dest, power):
         same_component = 0
         for e in self.connected_components_set() :
             if (src in e) and (dest in e) : 
@@ -70,10 +70,10 @@ class Graph:
         raise NotImplementedError
 
 # Voir algo BFS
-    def get_path_with_power1(self, src, dest, power):
+    def get_path_with_power(self, src, dest, power):
         result = self.min_power(src, dest)
         if result[0] <= power:
-            return result
+            return result[1]
         else :
             return None
 
