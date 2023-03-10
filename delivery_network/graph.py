@@ -1,5 +1,6 @@
 from operator import itemgetter
 
+
 class Graph:
     def __init__(self, nodes=[]):
         self.nodes = nodes
@@ -47,7 +48,7 @@ class Graph:
                 nodes_in_components = [n for n in e]
         if same_component == 0 : return None
         
-        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
+        inf = float('inf') #on utilise un majorant de la somme des puissances comme inf
         s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
         s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
 
@@ -74,8 +75,8 @@ class Graph:
 # Voir algo BFS
     def get_path_with_power(self, src, dest, power):
         result = self.min_power(src, dest)
-        if result[0] <= power:
-            return result[1]
+        if result[1] <= power:
+            return result[0]
         else :
             return None
 
@@ -90,7 +91,7 @@ class Graph:
                 nodes_in_components = [n for n in e]
         if same_component == 0 : return None
         
-        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
+        inf = float('inf') #on utilise un majorant de la somme des puissances comme inf
         s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
         s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
 
@@ -153,7 +154,7 @@ class Graph:
                 nodes_in_components = [n for n in e]
         if same_component == 0 : return None
         
-        inf = 150000 #on utilise un majorant de la puissances comme inf
+        inf = float('inf') #on utilise un majorant de la puissances comme inf
         s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
         s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
 
@@ -274,11 +275,28 @@ class Graph:
             if enfant_noeud not in chemin:
                 nouveau_chemin, puissance_min= self.dfs(enfant_noeud, dest, chemin, nouvelle_puissance_min)
                 if nouveau_chemin is not None:
-                    return nouveau_chemin, puissance_min
+                    return nouveau_chemin, max(puissance_min,nouvelle_puissance_min)
         chemin.pop()
         return None,0
 
-#calculer la puissance nécessaire
+
+def ROUTES(graphe_path, routes_path):
+    
+    g=graph_from_file(graphe_path)
+    KR=g.kruskal() #on édite le graphe et on le transforme en arbre de Kruskal
+    routes_in=open(routes_path,'r')
+    routes_out=open('/home/onyxia/ENSAE-Projet-de-programmation/input/routes.x.out','w')
+
+    nb_routes=routes_in.readline() #On lit la première contenant le nombre de routes
+    lignes=routes_in.readlines()    #On crée une liste de routes
+
+    for ligne in lignes: 
+        route=ligne.split(' ') #on lit chaque ligne du fichier et on les place dans une liste
+        chemin,puissance_min = KR.dfs(int(route[0]),int(route[1]),[])
+        routes_out.write(str(puissance_min) +'\n') #on écrit la puissance min nécessaire pour chaque route
+    routes_in.close()
+    routes_out.close()
+    return None
 
 
 

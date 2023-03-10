@@ -1,19 +1,8 @@
-from graph import Graph, graph_from_file
+from graph import Graph, graph_from_file, ROUTES
 from operator import itemgetter
 
-data_path = "/home/onyxia/ENSAE-Projet-de-programmation/input/"
-file_name = "network.4.in"
 
-g = graph_from_file(data_path + file_name)
+file_name = "/home/onyxia/ENSAE-Projet-de-programmation/input/network.1.in"
+route_name= "/home/onyxia/ENSAE-Projet-de-programmation/input/routes.1.in"
 
-
-
-"""
-component = g.connected_components_set()
-print(component)
-print(g.get_path_with_power(1, 2, 10))
-"""
-KR=g.kruskal()
-
-DFS=KR.dfs(1,1800)
-print(DFS)
+ROUTES(file_name,route_name)
