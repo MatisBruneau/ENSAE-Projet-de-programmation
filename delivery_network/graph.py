@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 class Graph:
     def __init__(self, nodes=[]):
         self.nodes = nodes
@@ -182,6 +184,105 @@ class Graph:
                 self.explore(e[0], visited) # on repart en exploration dans le node qu'on a pas exploré, en ne perdant pas la trace des noeud visité
         
         return [n for n in self.nodes if visited[n-1]]
+
+
+
+
+
+        #TP2
+    def transfor(self): #on a besoin de représenter le graphe par des listes pour pouvoir le trier
+        G=[]
+        for node in self.graph:
+            liste_clé = self.graph[node]
+            for arrete in liste_clé:
+                G.append((node,arrete[0],arrete[1],arrete[2])) #on implémente le noeud de départ, d'arrivée, la puissance min
+        return G
+
+
+    def tri(self,liste): #On a besoin de trier les arrêtes pour l'algo de Kruskal
+        liste = sorted(liste, key=itemgetter(2)) #on trie liste en fonction du deuxième élément des ses tuples
+        return liste
+
+    def union(self,parent, taille, x, y):
+        """
+        Fusionne les ensembles contenant les sommets x et y.
+        """
+        origine_x = self.find(parent, x)
+        origine_y = self.find(parent, y)
+
+        # Sinon, on fusionne les ensembles en mettant l'origine de l'arbre le plus petit comme enfant de l'origine de l'arbre le plus grand.
+        if taille[origine_x-1] < taille[origine_y-1]:
+            parent[origine_x-1] = origine_y
+            taille[origine_y-1] += taille[origine_x-1]
+        else:
+            parent[origine_y-1] = origine_x
+            taille[origine_x-1] += taille[origine_y-1]
+
+    def find(self,parent, x):
+        """
+        Trouve le représentant de l'ensemble auquel appartient le sommet donné.
+        """
+        # Si le parent du sommet est lui-même, cela signifie que c'est la racine de l'arbre, donc on le renvoie.
+        if parent[x-1] == x:
+            return x
+        # Sinon, on continue de remonter l'arbre jusqu'à atteindre la racine.
+        else:
+            return self.find(parent, parent[x-1])
+
+    def kruskal(self):
+        #On a besoin de Union-find pour vérifier lorsque l'on ajoute une arrête que l'on préserve le caractère acyclique 
+        #Initialisation  
+        KR=[]
+        Liste_arrete=self.tri(self.transfor())
+        parent=[0]*len(self.graph) #indique pour chaque noeud quel est le "noeud-père" 
+        taille=[1]*len(self.graph) #taille de chaque set, afin d'optimiser les calculs
+        for node in self.graph: #on construit les cycles nécessaires à l'union-find
+            parent[node-1]=node
+        
+        #Principal
+        for arrete in Liste_arrete:
+            x=arrete[0] #on simplifie l'écriture (x,y) point de départ et d'arrivée de l'arrête examinée
+            y=arrete[1]
+            if self.find(parent, x) != self.find(parent, y): #on veut que x et y ne soient pas dans le même set
+                self.union(parent, taille, x, y)
+                KR.append(arrete)
+
+
+        #Transformation de la liste obtenue en graphe
+        KR_nodes=set()
+        for arrete in KR: #on a besoin d'une liste de noeuds pour créer un graphe
+            KR_nodes.add(arrete[0])
+            KR_nodes.add(arrete[1])
+        KR_nodes=list(KR_nodes)
+        KRUSKAL = Graph(KR_nodes)
+        for arrete in KR : #on boucle sur les arêtes pour les ajouter
+            KRUSKAL.add_edge(arrete[0], arrete[1], arrete[2], arrete[3])
+
+        return KRUSKAL
+
+    def dfs(self, src, dest, chemin=[], puissance_min=0):
+        """
+        DFS dans l'arbre obtenu par l'algo de Kruskal
+        """
+        chemin.append(src)
+        if src == dest:
+            return chemin, puissance_min #La destination est atteinte
+        for enfant in self.graph[src]:
+            enfant_noeud=enfant[0] #on ne prend que la destination de l'arrête
+            enfant_puissance=enfant[1]
+            nouvelle_puissance_min = max(puissance_min, enfant_puissance)
+            if enfant_noeud not in chemin:
+                nouveau_chemin, puissance_min= self.dfs(enfant_noeud, dest, chemin, nouvelle_puissance_min)
+                if nouveau_chemin is not None:
+                    return nouveau_chemin, puissance_min
+        chemin.pop()
+        return None,0
+
+#calculer la puissance nécessaire
+
+
+
+
 
 def graph_from_file(filename):
     """
