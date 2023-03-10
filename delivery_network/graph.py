@@ -144,14 +144,14 @@ class Graph:
         """
         Should return path, min_power. 
         """
-        same_component = 0
+        same_component = 0 # on vérifie que la source et la destination sont bien dans la même composante, on retourne None sinon
         for e in self.connected_components_set() :
             if (src in e) and (dest in e) : 
                 same_component = 1
                 nodes_in_components = [n for n in e]
         if same_component == 0 : return None
         
-        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
+        inf = 150000 #on utilise un majorant de la puissances comme inf
         s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
         s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
 
