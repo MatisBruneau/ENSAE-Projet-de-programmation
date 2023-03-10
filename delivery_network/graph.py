@@ -321,3 +321,15 @@ def graph_from_file(filename):
     f.close()
     return graph
     raise NotImplementedError
+
+def routes(graphe_path, route_path):
+    g = graph_from_file(graphe_path)
+    kruskal = g.kruskal()
+    f = open(route_path, "r")
+    h = open("/home/onyxia/work/ENSAE-Projet-de-programmation/output/route.x.out", "w")
+    nb_route = f.readline()
+    for i in range(int(nb_route)):
+        line = f.readline().split()
+        h.write(str(kruskal.dfs(line[0], line[1])[1]) + "\n")
+    f.close()
+    h.close()
