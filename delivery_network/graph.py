@@ -161,7 +161,7 @@ class Graph:
         while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer): #tant qu'il reste des sommets à explorer
             s_min = min(s_a_explorer, key = s_a_explorer.get) #on sélectionne le sommet connecté à la source avec la puissance minimale
             puissance_s_min, precedent_s_min = s_a_explorer[s_min] #on retient la puissance min et le parent
-            for successeur in [e[0] for e in self.graph[s_min]]:
+            for successeur in [e[0] for e in self.graph[s_min]]: #on boucle sur les nodes reliés à l'actuel
                 if successeur in s_a_explorer:
                     puissance = max(puissance_s_min, e[1])
                     if puissance < s_a_explorer[successeur][0]:
@@ -169,7 +169,7 @@ class Graph:
             s_explore[s_min] = [puissance_s_min, s_explore[precedent_s_min][1] + [s_min]]
             del s_a_explorer[s_min]
 
-        return s_explore[dest]
+        return s_explore[dest][::-1] # on renvoie la liste en l'inversant parce qu'elle n'est pas dans le bon sens
         raise NotImplementedError
 
     def explore(self, v, visited = None):
