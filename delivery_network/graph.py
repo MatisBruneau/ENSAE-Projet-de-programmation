@@ -206,21 +206,23 @@ class Graph:
 
         return KRUSKAL
 
-    def dfs(self, src, dest, chemin=[]):
+    def dfs(self, src, dest, chemin=[], puissance_min=0):
         """
         DFS dans l'arbre obtenu par l'algo de Kruskal
         """
         chemin.append(src)
         if src == dest:
-            return chemin #La destination est atteinte
+            return chemin, puissance_min #La destination est atteinte
         for enfant in self.graph[src]:
-            enfant=enfant[0] #on ne prend que la destination de l'arrête
-            if enfant not in chemin:
-                nouveau_chemin= self.dfs(enfant, dest, chemin)
+            enfant_noeud=enfant[0] #on ne prend que la destination de l'arrête
+            enfant_puissance=enfant[1]
+            nouvelle_puissance_min = max(puissance_min, enfant_puissance)
+            if enfant_noeud not in chemin:
+                nouveau_chemin, puissance_min= self.dfs(enfant_noeud, dest, chemin, nouvelle_puissance_min)
                 if nouveau_chemin is not None:
-                    return nouveau_chemin
-        
-        return None
+                    return nouveau_chemin, puissance_min
+        chemin.pop()
+        return None,0
 
 #calculer la puissance nécessaire
 
@@ -258,7 +260,10 @@ def graph_from_file(filename):
     for i in range(nb_edges) : #on boucle sur les arêtes pour les ajouter
         line = f.readline()
         chara = line.split()
-        graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]), int(chara[3]))
+        if len(chara) == 4:
+            graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]), int(chara[3]))
+        else:
+            graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]))
     f.close()
     return graph
     raise NotImplementedError
