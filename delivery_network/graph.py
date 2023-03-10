@@ -75,7 +75,7 @@ class Graph:
     def get_path_with_power(self, src, dest, power):
         result = self.min_power(src, dest)
         if result[1] <= power:
-            return result[1]
+            return result[0]
         else :
             return None
 
