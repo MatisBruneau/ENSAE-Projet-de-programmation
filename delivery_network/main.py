@@ -10,4 +10,4 @@ route_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/routes.1.in"
 g = graph_from_file(graph_path)
 k = g.kruskal()
 print(k)
-print(k.dfs(6, 11))
+print(k.dfs(13,16))
