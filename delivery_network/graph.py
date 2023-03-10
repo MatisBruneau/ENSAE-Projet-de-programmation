@@ -224,6 +224,7 @@ class Graph:
         chemin.pop()
         return None,0
 
+#calculer la puissance nécessaire
 
 
 
