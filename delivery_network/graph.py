@@ -329,6 +329,7 @@ def routes(graphe_path, route_path):
     h = open("/home/onyxia/work/ENSAE-Projet-de-programmation/output/route.x.out", "w") #on génère un fichier qui contiendra les résultats
     nb_route = f.readline() #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
     for i in range(int(nb_route) - 1): #on boucle sur les lignes du fichier qui représentent des routes à tester
+        print(i)
         line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
         src = int(line[0])
         dest = int(line[1])
