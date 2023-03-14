@@ -3,8 +3,8 @@ from operator import itemgetter
 from time import perf_counter
 
 #data_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/"
-graph_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/network.2.in"
-route_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/routes.2.in"
+graph_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/network.1.in"
+route_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/routes.1.in"
 
 routes(graph_path, route_path)
 print("finish")
