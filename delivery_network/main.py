@@ -3,12 +3,15 @@ from operator import itemgetter
 from time import perf_counter
 
 #data_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/"
-graph_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/network.1.in"
+graph_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/network.04.in"
 route_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/routes.1.in"
 
-routes(graph_path, route_path)
-print("finish")
+#routes(graph_path, route_path)
+#print("finish")
 #g = graph_from_file(graph_path)
 #k = g.kruskal()
 #print(k)
 #print(k.dfs(13,16, []))
+
+g = graph_from_file(graph_path)
+print(g.kruskal())
