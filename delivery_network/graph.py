@@ -78,8 +78,9 @@ class Graph:
             return result[0]
         else :
             return None
-
         raise NotImplementedError
+        # Pour faire cela nous avons utilisé un algorithme de Djikstra modifié (car les puissances ne se somment pas). Cela fait que la complexité est de
+        # O((E + V) * log(V))
 
 
     def get_path_with_power2(self, src, dest, power):
@@ -134,6 +135,7 @@ class Graph:
                 for v in components[-1]: 
                     visited[v-1] = 1     
         return components
+        #la complexité de l'algorithme DFS est de O(V + E), avec V le nombre de points et E le nombre d'arêtes
 
     def connected_components_set(self):
         """
@@ -173,6 +175,8 @@ class Graph:
 
         return s_explore[dest][::-1] # on renvoie la liste en l'inversant parce qu'elle n'est pas dans le bon sens
         raise NotImplementedError
+        # Pour faire cela nous avons utilisé un algorithme de Djikstra modifié (car les puissances ne se somment pas). Cela fait que la complexité est de
+        # O((E + V) * log(V))
 
     def explore(self, v, visited = None):
         if visited == None:
@@ -259,6 +263,7 @@ class Graph:
             KRUSKAL.add_edge(arrete[0], arrete[1], arrete[2], arrete[3])
 
         return KRUSKAL
+        # La complexité pour donner le graphe de Kruskal (avec une méthode Union-Find de compression des chemins) est de O(E log(V))
 
     def dfs(self, src, dest, chemin = [], puissance_min=0):
         """
@@ -277,6 +282,7 @@ class Graph:
                     return nouveau_chemin, max(nouvelle_puissance_min, puissance_min)
         chemin.pop()
         return None,0
+        # La complexité de l'algorithme de DFS est de O(S+A)
 
 #calculer la puissance nécessaire
 
