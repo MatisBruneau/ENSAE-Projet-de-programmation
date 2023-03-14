@@ -18,9 +18,8 @@ g = graph_from_file(graph_path)
 
 t1_start = perf_counter()
 
-print(g.min_power(1, 2, 1))
-print(g.min_power(1, 3, 1))
-print(g.min_power(2, 4, 1))
+print(g.min_power(6, 11))
+print(g.kruskal().dfs(6, 11))
 
 # Stop the stopwatch / counter
 t1_stop = perf_counter()
