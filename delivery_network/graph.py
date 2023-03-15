@@ -230,6 +230,7 @@ class Graph:
         chemin.pop()
         return None,0
         # La complexité de l'algorithme de DFS est de O(S+A)
+        # C'est cette fonction qui calcule le chemin de puissance minimale dans le MST
 
 def graph_from_file(filename):
     """
