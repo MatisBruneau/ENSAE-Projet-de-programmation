@@ -231,6 +231,8 @@ class Graph:
 
         # Retourne à la fois la puissance minimale maximale et le chemin
         return path, power[dest]
+        #La complexité dans ce cas est de O(V^2), où V est le nombre de sommets, car dans le pire des cas, 
+        #on boucle sur tous les sommets dans le while et dans le for qui suit.
 
 
     def explore(self, v, visited = None):
