@@ -144,7 +144,7 @@ class Graph:
         """
         return set(map(frozenset, self.connected_components2()))
     
-    def min_power(self, src, dest, connected = 0):
+    def min_power2(self, src, dest):
         """
         Should return path, min_power. 
         """
@@ -177,6 +177,61 @@ class Graph:
         raise NotImplementedError
         # Pour faire cela nous avons utilisé un algorithme de Djikstra modifié (car les puissances ne se somment pas). Cela fait que la complexité est de
         # O((E + V) * log(V))
+
+
+    def min_power(self, src, dest):
+        same_component = 0 # on vérifie que la source et la destination sont bien dans la même composante, on retourne None sinon
+        for e in self.connected_components_set() :
+            if (src in e) and (dest in e) : 
+                same_component = 1
+                nodes_in_component = [n for n in e]
+        if same_component == 0 : return None
+
+        # On initialise la distance de tous les sommets à l'infini sauf la source
+        power = {node: float('inf') for node in nodes_in_component}
+        power[src] = 0
+
+        # On initialise la liste des sommets visités
+        visited = set()
+
+        # Initialisation de la table des parents
+        parents = {node: None for node in nodes_in_component}
+
+        # Boucle principale de l'algorithme de Dijkstra modifié
+        while len(visited) < len(nodes_in_component):
+        # Recherche du sommet non visité avec la plus petite distance
+            current_node = None
+            min_power = float('inf')
+            for node in nodes_in_component:
+                if node not in visited and power[node] < min_power:
+                    current_node = node
+                    min_power = power[node]
+
+            # Ajout du sommet courant à la liste des sommets visités
+            visited.add(current_node)
+
+            # Parcours des voisins du sommet courant
+            for edge in self.graph[current_node]:
+                neighbor = edge[0]
+                edge_cost = edge[1]
+                # Calcul du coût maximal entre la source et le voisin
+                max_cost = max(power[current_node], edge_cost)
+            
+                # Si ce coût est inférieur à la distance actuellement connue,
+                # on met à jour la distance et le parent du voisin
+                if max_cost < power[neighbor]:
+                    power[neighbor] = max_cost
+                    parents[neighbor] = current_node
+
+         # Retrace le chemin de la destination vers la source
+        path = [dest]
+        while path[-1] != src:
+            path.append(parents[path[-1]])
+        path.reverse()
+
+        # Retourne à la fois la distance minimale maximale et le chemin
+        return path, power[dest]
+
 
     def explore(self, v, visited = None):
         if visited == None:
