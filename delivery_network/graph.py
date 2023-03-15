@@ -187,19 +187,19 @@ class Graph:
                 nodes_in_component = [n for n in e]
         if same_component == 0 : return None
 
-        # On initialise la distance de tous les sommets à l'infini sauf la source
+        # On initialise la puissance de tous les sommets à l'infini sauf la source
         power = {node: float('inf') for node in nodes_in_component}
         power[src] = 0
 
         # On initialise la liste des sommets visités
         visited = set()
 
-        # Initialisation de la table des parents
+        # On initialise la table des parents
         parents = {node: None for node in nodes_in_component}
 
-        # Boucle principale de l'algorithme de Dijkstra modifié
+        # Boucle principale de l'algorithme de Dijkstra modifié, tourne tant qu'il reste des sommets non visités
         while len(visited) < len(nodes_in_component):
-        # Recherche du sommet non visité avec la plus petite distance
+        # Recherche du sommet non visité avec la plus petite puissance
             current_node = None
             min_power = float('inf')
             for node in nodes_in_component:
@@ -223,13 +223,13 @@ class Graph:
                     power[neighbor] = max_cost
                     parents[neighbor] = current_node
 
-         # Retrace le chemin de la destination vers la source
+        # Retrace le chemin de la destination vers la source en remontant les parents successifs de la destination
         path = [dest]
         while path[-1] != src:
             path.append(parents[path[-1]])
         path.reverse()
 
-        # Retourne à la fois la distance minimale maximale et le chemin
+        # Retourne à la fois la puissance minimale maximale et le chemin
         return path, power[dest]
 
 
