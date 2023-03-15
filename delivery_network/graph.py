@@ -40,39 +40,7 @@ class Graph:
         return 
         raise NotImplementedError
     
-    def get_path_with_power1(self, src, dest, power):
-        same_component = 0
-        for e in self.connected_components_set() :
-            if (src in e) and (dest in e) : 
-                same_component = 1
-                nodes_in_components = [n for n in e]
-        if same_component == 0 : return None
-        
-        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
-        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
-        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
 
-        for e in self.graph[src]:
-            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
-
-        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer): #tant qu'il reste des sommets à explorer
-            s_min = min(s_a_explorer, key = s_a_explorer.get) #on sélectionne le sommet connecté à la source avec la puissance minimale
-            puissance_s_min, precedent_s_min = s_a_explorer[s_min] #on retient la puissance min et le parent
-            for successeur in [e[0] for e in self.graph[s_min]]:
-                if successeur in s_a_explorer:
-                    puissance = max(puissance_s_min, e[1])
-                    if puissance < s_a_explorer[successeur][0]:
-                        s_a_explorer[successeur] = [puissance, s_min]
-            s_explore[s_min] = [puissance_s_min, s_explore[precedent_s_min][1] + [s_min]]
-            del s_a_explorer[s_min]          
-
-        if s_explore[dest][0] <= power:
-            return s_explore[dest]
-        else :
-            return None 
-        raise NotImplementedError
-
-# Voir algo BFS
     def get_path_with_power(self, src, dest, power):
         result = self.min_power(src, dest)
         if result[1] <= power:
@@ -80,54 +48,10 @@ class Graph:
         else :
             return None
         raise NotImplementedError
-        # Pour faire cela nous avons utilisé un algorithme de Djikstra modifié (car les puissances ne se somment pas). Cela fait que la complexité est de
-        # O((E + V) * log(V))
+        #La complexité dans ce cas est de O(V^2), où V est le nombre de sommets, car dans le pire des cas, 
+        #on boucle sur tous les sommets dans le while et dans le for qui suit.
 
-
-    def get_path_with_power2(self, src, dest, power):
-        same_component = 0
-        for e in self.connected_components_set() :
-            if (src in e) and (dest in e) : 
-                same_component = 1
-                nodes_in_components = [n for n in e]
-        if same_component == 0 : return None
-        
-        inf = float("inf") #on utilise un majorant de la somme des puissances comme inf
-        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
-        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
-
-        for e in self.graph[src]:
-            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
-
-        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer):
-            s_min = min(s_a_explorer, key = s_a_explorer.get)
-            longueur_s_min, precedent_s_min = s_a_explorer[s_min]
-            for successeur in [e[0] for e in self.graph[s_min]]:
-                if successeur in s_a_explorer:
-                    dist = longueur_s_min + e[1]
-                    if dist < s_a_explorer[successeur][0]:
-                        s_a_explorer[successeur] = [dist, s_min]
-            s_explore[s_min] = [longueur_s_min, s_explore[precedent_s_min][1] + [s_min]]
-            del s_a_explorer[s_min]          
-
-        return s_explore[dest][1] 
-        raise NotImplementedError
-    
-
-    def connected_components(self) :
-        nodes_component = [n for n in self.nodes] #initialisation d'une liste contenant les components de chaque node (la position i contient la composante du noeud i)
-        for n in range(self.nb_nodes) : #on parcourt les nodes
-            for e in self.graph[n+1] : #pour chaque node on regarde ses arêtes
-                nodes_component[e[0]-1] = min(nodes_component[n], nodes_component[e[0]-1]) #on place les deux nodes dans la même composante (en choisissant le minimum)
-                nodes_component[n] = min(nodes_component[n], nodes_component[e[0]-1])
-        unique_values = set(nodes_component) #on regarde les composantes qui restent après avoir parcourut tout les noeuds
-        components = {} #on va stocker les composantes dans un dictionnaire
-        for u in unique_values : #on parcourt les composantes
-            components[u] = [n+1 for (n, component) in enumerate(nodes_component) if component == u] #on retrouve les noeuds dans la composante u
-        return components.values() #on revoit les listes contenant les noeuds des composantes
-        raise NotImplementedError
-
-    def connected_components2(self):
+    def connected_components(self):
         components = []
         visited = [0] * len(self.nodes)
         for n in self.nodes:
@@ -143,43 +67,8 @@ class Graph:
         The result should be a set of frozensets (one per component), 
         For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
         """
-        return set(map(frozenset, self.connected_components2()))
+        return set(map(frozenset, self.connected_components()))
     
-    def min_power2(self, src, dest):
-        """
-        Should return path, min_power. 
-        """
-        same_component = 0 # on vérifie que la source et la destination sont bien dans la même composante, on retourne None sinon
-        for e in self.connected_components_set() :
-            if (src in e) and (dest in e) : 
-                same_component = 1
-                nodes_in_components = [n for n in e]
-        if same_component == 0 : return None
-        
-        inf = float("inf") #on utilise l'infini de la puissances comme inf
-        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
-        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorés
-
-        for e in self.graph[src]:
-            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
-
-        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer): #tant qu'il reste des sommets à explorer
-            s_min = min(s_a_explorer, key = s_a_explorer.get) #on sélectionne le sommet connecté à la source avec la puissance minimale
-            puissance_s_min, precedent_s_min = s_a_explorer[s_min] #on retient la puissance min et le parent
-            for successeur in [e[0] for e in self.graph[s_min]]: #on boucle sur les nodes reliés à l'actuel
-                if successeur in s_a_explorer:
-                    puissance = max(puissance_s_min, e[1])
-                    if puissance < s_a_explorer[successeur][0]:
-                        s_a_explorer[successeur] = [puissance, s_min]
-            s_explore[s_min] = [puissance_s_min, s_explore[precedent_s_min][1] + [s_min]]
-            del s_a_explorer[s_min]
-
-        return s_explore[dest][::-1] # on renvoie la liste en l'inversant parce qu'elle n'est pas dans le bon sens
-        raise NotImplementedError
-        # Pour faire cela nous avons utilisé un algorithme de Djikstra modifié (car les puissances ne se somment pas). Cela fait que la complexité est de
-        # O((E + V) * log(V))
-
-
     def min_power(self, src, dest):
         same_component = 0 # on vérifie que la source et la destination sont bien dans la même composante, on retourne None sinon
         for e in self.connected_components_set() :
@@ -342,12 +231,6 @@ class Graph:
         return None,0
         # La complexité de l'algorithme de DFS est de O(S+A)
 
-#calculer la puissance nécessaire
-
-
-
-
-
 def graph_from_file(filename):
     """
     Reads a text file and returns the graph as an object of the Graph class.
@@ -423,5 +306,116 @@ def routes_test(graphe_path, route_path):
 
 """
 Q10 : notre algorithme ne fonctionne pas sur les graphes au-delà du graphe 1, car python s'arrête à cause d'une boucle trop longue
-
+Q15 : en utilisant la fonction routes_test, notre programme estime mettre 110 minutes pour calculer les routes du fichier routes.2.in
 """
+
+# Méthodes non-utilisées dans le programme:
+
+def get_path_with_power1(self, src, dest, power):
+        same_component = 0
+        for e in self.connected_components_set() :
+            if (src in e) and (dest in e) : 
+                same_component = 1
+                nodes_in_components = [n for n in e]
+        if same_component == 0 : return None
+        
+        inf = 150000 #on utilise un majorant de la somme des puissances comme inf
+        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
+        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
+
+        for e in self.graph[src]:
+            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
+
+        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer): #tant qu'il reste des sommets à explorer
+            s_min = min(s_a_explorer, key = s_a_explorer.get) #on sélectionne le sommet connecté à la source avec la puissance minimale
+            puissance_s_min, precedent_s_min = s_a_explorer[s_min] #on retient la puissance min et le parent
+            for successeur in [e[0] for e in self.graph[s_min]]:
+                if successeur in s_a_explorer:
+                    puissance = max(puissance_s_min, e[1])
+                    if puissance < s_a_explorer[successeur][0]:
+                        s_a_explorer[successeur] = [puissance, s_min]
+            s_explore[s_min] = [puissance_s_min, s_explore[precedent_s_min][1] + [s_min]]
+            del s_a_explorer[s_min]          
+
+        if s_explore[dest][0] <= power:
+            return s_explore[dest]
+        else :
+            return None 
+        raise NotImplementedError
+
+
+def get_path_with_power2(self, src, dest, power):
+        same_component = 0
+        for e in self.connected_components_set() :
+            if (src in e) and (dest in e) : 
+                same_component = 1
+                nodes_in_components = [n for n in e]
+        if same_component == 0 : return None
+        
+        inf = float("inf") #on utilise un majorant de la somme des puissances comme inf
+        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
+        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorer
+
+        for e in self.graph[src]:
+            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
+
+        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer):
+            s_min = min(s_a_explorer, key = s_a_explorer.get)
+            longueur_s_min, precedent_s_min = s_a_explorer[s_min]
+            for successeur in [e[0] for e in self.graph[s_min]]:
+                if successeur in s_a_explorer:
+                    dist = longueur_s_min + e[1]
+                    if dist < s_a_explorer[successeur][0]:
+                        s_a_explorer[successeur] = [dist, s_min]
+            s_explore[s_min] = [longueur_s_min, s_explore[precedent_s_min][1] + [s_min]]
+            del s_a_explorer[s_min]          
+
+        return s_explore[dest][1] 
+        raise NotImplementedError
+
+def min_power2(self, src, dest):
+        """
+        Should return path, min_power. 
+        """
+        same_component = 0 # on vérifie que la source et la destination sont bien dans la même composante, on retourne None sinon
+        for e in self.connected_components_set() :
+            if (src in e) and (dest in e) : 
+                same_component = 1
+                nodes_in_components = [n for n in e]
+        if same_component == 0 : return None
+        
+        inf = float("inf") #on utilise l'infini de la puissances comme inf
+        s_a_explorer = {n : [inf, ""] for n in nodes_in_components if n != src} #On associe au sommet d'origine src la liste [puissance, plus court chemin]
+        s_explore = {src : [0, [src]]} #on créée un dictionnaire avec les sommets déjà explorés
+
+        for e in self.graph[src]:
+            s_a_explorer[e[0]] = [e[1], src] #on ajoute dans les sommets en clé le sommet et en valeur la puissance et la source
+
+        while s_a_explorer and any(s_a_explorer[i][0] < inf for i in s_a_explorer): #tant qu'il reste des sommets à explorer
+            s_min = min(s_a_explorer, key = s_a_explorer.get) #on sélectionne le sommet connecté à la source avec la puissance minimale
+            puissance_s_min, precedent_s_min = s_a_explorer[s_min] #on retient la puissance min et le parent
+            for successeur in [e[0] for e in self.graph[s_min]]: #on boucle sur les nodes reliés à l'actuel
+                if successeur in s_a_explorer:
+                    puissance = max(puissance_s_min, e[1])
+                    if puissance < s_a_explorer[successeur][0]:
+                        s_a_explorer[successeur] = [puissance, s_min]
+            s_explore[s_min] = [puissance_s_min, s_explore[precedent_s_min][1] + [s_min]]
+            del s_a_explorer[s_min]
+
+        return s_explore[dest][::-1] # on renvoie la liste en l'inversant parce qu'elle n'est pas dans le bon sens
+        raise NotImplementedError
+        # Pour faire cela nous avons utilisé un algorithme de Djikstra modifié (car les puissances ne se somment pas). Cela fait que la complexité est de
+        # O((E + V) * log(V))
+
+def connected_components2(self) :
+    nodes_component = [n for n in self.nodes] #initialisation d'une liste contenant les components de chaque node (la position i contient la composante du noeud i)
+    for n in range(self.nb_nodes) : #on parcourt les nodes
+        for e in self.graph[n+1] : #pour chaque node on regarde ses arêtes
+            nodes_component[e[0]-1] = min(nodes_component[n], nodes_component[e[0]-1]) #on place les deux nodes dans la même composante (en choisissant le minimum)
+            nodes_component[n] = min(nodes_component[n], nodes_component[e[0]-1])
+    unique_values = set(nodes_component) #on regarde les composantes qui restent après avoir parcourut tout les noeuds
+    components = {} #on va stocker les composantes dans un dictionnaire
+    for u in unique_values : #on parcourt les composantes
+        components[u] = [n+1 for (n, component) in enumerate(nodes_component) if component == u] #on retrouve les noeuds dans la composante u
+    return components.values() #on revoit les listes contenant les noeuds des composantes
+    raise NotImplementedError
