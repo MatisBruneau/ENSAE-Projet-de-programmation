@@ -260,12 +260,12 @@ def graph_from_file(filename):
     nodes = [n+1 for n in range(nb_nodes)]
     graph = Graph(nodes)
     for i in range(nb_edges) : #on boucle sur les arêtes pour les ajouter
-        line = f.readline()
-        chara = line.split()
-        if len(chara) == 4:
-            graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]), int(chara[3]))
+        line = f.readline() #on lit la ligne suivante
+        chara = line.split() #on récupère ce qui est écrit
+        if len(chara) == 4: #on vérifie si la distance est indiquée
+            graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]), int(chara[3])) #on ajoute l'arête
         else:
-            graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2]))
+            graph.add_edge(int(chara[0]), int(chara[1]), int(chara[2])) #on ajoute l'arête sans préciser la distance
     f.close()
     return graph
     raise NotImplementedError
