@@ -330,10 +330,10 @@ class Graph:
         if src == dest:
             return chemin, puissance_min #La destination est atteinte
         for enfant in self.graph[src]:
-            enfant_noeud=enfant[0] #on ne prend que la destination de l'arrête
-            enfant_puissance=enfant[1]
-            nouvelle_puissance_min = max(puissance_min, enfant_puissance)
-            if enfant_noeud not in chemin:
+            enfant_noeud=enfant[0] #on prend la destination de l'arête
+            enfant_puissance=enfant[1] #on prend la puissance de l'arête
+            nouvelle_puissance_min = max(puissance_min, enfant_puissance) #la nouvelle puissance est le max entre l'ancienne et celle de l'arête considérée
+            if enfant_noeud not in chemin: #si on est pas déjà passé par ce noeud, on lui applique l'algorithme DFS
                 nouveau_chemin, puissance_min= self.dfs(enfant_noeud, dest, chemin, nouvelle_puissance_min)
                 if nouveau_chemin is not None:
                     return nouveau_chemin, max(nouvelle_puissance_min, puissance_min)
