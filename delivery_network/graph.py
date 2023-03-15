@@ -1,4 +1,5 @@
 from operator import itemgetter
+from time import perf_counter
 
 class Graph:
     def __init__(self, nodes=[]):
@@ -399,3 +400,28 @@ def routes(graphe_path, route_path):
         h.write(str(kruskal.dfs(src, dest, [])[1]) + "\n") #on note dans le fichier de sorti l'utilité minimale qui est calculé en appliquant la méthode dfs à l'arbre
     f.close()
     h.close()
+
+
+def routes_test(graphe_path, route_path):
+    g = graph_from_file(graphe_path) #on génère le graph du fichier
+    t1_start = perf_counter() # on lance le chrono
+    kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode kruskal
+    f = open(route_path, "r") #on récupère les routes
+    h = open("/home/onyxia/work/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
+    nb_route = int(f.readline()) #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
+    for i in range(1000): #on boucle sur les lignes du fichier qui représentent des routes à tester
+        line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
+        src = int(line[0])
+        dest = int(line[1])
+        h.write(str(kruskal.dfs(src, dest, [])[1]) + "\n")
+    t1_stop = perf_counter() #on arrête le chrono
+    duration = t1_stop-t1_start
+    f.close()
+    h.write(str((nb_route * duration) / 60000))
+    h.close
+    print((nb_route * duration) / 60000) #on retourne le temps estimé en minutes du traitement total du fichier 
+
+"""
+Q10 : notre algorithme ne fonctionne pas sur les graphes au-delà du graphe 1, car python s'arrête à cause d'une boucle trop longue
+
+"""
