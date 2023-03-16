@@ -330,6 +330,9 @@ def glutonny(self, path_routes_x, path_trucks_x):
 
     for ligne in ligne_camions:
 
+    liste_routes.sort(key = itemgetter(item))
+    
+
 # Méthodes non-utilisées dans le programme:
 
 def get_path_with_power1(self, src, dest, power):
