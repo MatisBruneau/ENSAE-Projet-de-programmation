@@ -4,12 +4,12 @@ from time import perf_counter
 
 #data_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/"
 graph_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/network.1.in"
-route_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/routes.2.in"
+route_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/routes.1.in"
 
-#routes(graph_path, route_path)
+routes(graph_path, route_path)
 #print("finish")
-g = graph_from_file(graph_path)
-print(g.min_power(6, 11))
+#g = graph_from_file(graph_path)
+#print(g.min_power(6, 11))
 
 #routes_test(graph_path, route_path)
 
