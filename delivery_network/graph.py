@@ -281,7 +281,7 @@ def routes(graphe_path, route_path):
         line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
         src = int(line[0])
         dest = int(line[1])
-        h.write(str(kruskal.dfs(src, dest, [])[1]) + " " + line[2] + "\n") #on note dans le fichier de sorti l'utilité minimale qui est calculé en appliquant la méthode dfs à l'arbre
+        h.write(line[0] + " " + line[1] + " " + str(kruskal.dfs(src, dest, [])[1]) + " " + line[2] + "\n") #on note dans le fichier de sorti l'utilité minimale qui est calculé en appliquant la méthode dfs à l'arbre
     f.close()
     h.close()
 
