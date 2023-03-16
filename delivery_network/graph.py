@@ -309,6 +309,26 @@ def routes_test(graphe_path, route_path):
 Q10 : notre algorithme ne fonctionne pas sur les graphes au-delà du graphe 1, car python s'arrête à cause d'une boucle trop longue
 Q15 : en utilisant la fonction routes_test, notre programme estime mettre 110 minutes pour calculer les routes du fichier routes.2.in
 """
+def glutonny(self, path_routes_x, path_trucks_x):
+
+    #extraction de données
+    #on associe à la route son camion optimal (boucle for et while) [trajet , camion]
+    #on fait utilité/cout [trajet, optimal, coût] et on trie la liste selon 3
+    #on achète les camions de la liste jusqu'à atteindre le budget
+
+    routes = open(path_routes_x, "r") #on récupère les routes
+    camions = open(path_trucks_x, "r") #on récupère les camions
+    lignes_routes = routes.readlines()
+    lignes_camions = camions.readlines()
+    liste_routes = []
+    liste_camions = []
+
+
+    for ligne in ligne_routes:
+
+
+
+    for ligne in ligne_camions:
 
 # Méthodes non-utilisées dans le programme:
 
