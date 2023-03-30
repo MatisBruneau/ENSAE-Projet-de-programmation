@@ -232,6 +232,22 @@ class Graph:
         # La complexité de l'algorithme de DFS est de O(S+A)
         # C'est cette fonction qui calcule le chemin de puissance minimale dans le MST
 
+
+    def dfs2(self, src = None, parents = None, visited = None):
+        if src == None :
+            src = self.nodes[0]
+        if visited == None :
+            visited = set()
+        visited.add(src)
+        if parents is None:
+            parents = {src : [None, 0]}
+        for enfant in self.graph[src]:
+            if enfant[0] not in visited:
+                parents[enfant[0]] = [src, enfant[1]]
+                self.dfs2(enfant[0], parents, visited)
+        return parents
+            
+
 def graph_from_file(filename):
     """
     Reads a text file and returns the graph as an object of the Graph class.

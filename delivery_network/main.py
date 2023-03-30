@@ -9,8 +9,9 @@ route_1 = "/home/onyxia/ENSAE-Projet-de-programmation/output/route.1.out"
 camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.1.in"
 
 #routes(graph_path, route_path)
-print(len(glutonny(route_1, camion_1)))
-
+g = graph_from_file(graph_path)
+k = g.kruskal()
+print(k.dfs2())
 
 
 #print("finish")
