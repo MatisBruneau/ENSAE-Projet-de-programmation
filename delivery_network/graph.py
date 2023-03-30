@@ -361,10 +361,9 @@ def glutonny(path_routes_x, path_trucks_x, budget = 25e9):
     budget = 25e9
     index = 0
     achat_camion = []
-    while budget > 0 and (index < len(liste_routes)): #tant que le budget n'est pas épuisé, qu'on a pas fait toutes les routes et que les prochaines routes sont faisables
-        if liste_routes[index][4] > 0:
-            achat_camion.append([liste_routes[index][3], liste_routes[index][0]]) # on ajoute à la liste des achats de camion un camion et son trajet
-            budget = budget - liste_camions[liste_routes[index][3]][1] # on l'enlève du budget
+    while budget > 0 and (index < len(liste_routes)) and (liste_routes[index][4] > 0): #tant que le budget n'est pas épuisé, qu'on a pas fait toutes les routes et que les prochaines routes sont faisables
+        achat_camion.append([liste_routes[index][3], liste_routes[index][0]]) # on ajoute à la liste des achats de camion un camion et son trajet
+        budget = budget - liste_camions[liste_routes[index][3]][1] # on l'enlève du budget
         index += 1 #on augmente l'index
 
     if budget < 0 : #si le dernier camion était trop cher on le "rend"
