@@ -212,7 +212,7 @@ class Graph:
         return KRUSKAL
         # La complexité pour donner le graphe de Kruskal (avec une méthode Union-Find de compression des chemins) est de O(E log(V))
 
-    def dfs(self, src, dest, chemin = [], puissance_min=0):
+    def dfs(self, src, dest, chemin = [], puissance_min=0): #fonction dfs pas optimisée
         """
         DFS dans l'arbre obtenu par l'algo de Kruskal
         """
@@ -231,6 +231,30 @@ class Graph:
         return None,0
         # La complexité de l'algorithme de DFS est de O(S+A)
         # C'est cette fonction qui calcule le chemin de puissance minimale dans le MST
+
+    def dfs2(self, src = None , parent=None, visité=None):
+        if src is None:
+            src = self.nodes[0]
+        if visité is None:
+            visité = set()
+        visité.add(src)
+        if parent is None:
+            parent = {src: [None,0]}
+        for voisin in self.graph[src]:
+            if voisin[0] not in visité:
+                parent[voisin[0]] = [src,voisin[1]]
+                self.dfs2(voisin[0], parent, visité)
+        return parent
+
+
+
+
+
+
+
+
+
+
 
 def graph_from_file(filename):
     """

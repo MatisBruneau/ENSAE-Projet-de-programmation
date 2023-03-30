@@ -8,13 +8,16 @@ route_path = "/home/onyxia/ENSAE-Projet-de-programmation/input/routes.1.in"
 route_1 = "/home/onyxia/ENSAE-Projet-de-programmation/output/route.1.out"
 camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.1.in"
 budget = 25*10^9
-
+"""
 routes(graph_path, route_path)
-print(glutonny(route_1, camion_1,budget))
+print(glutonny(route_1, camion_1,budget))"""
 
 
 #print("finish")
-#g = graph_from_file(graph_path)
+g = graph_from_file(graph_path)
+k = g.kruskal()
+print(k)
+print(k.dfs2())
 #print(g.min_power(6, 11))
 
 #routes_test(graph_path, route_path)
