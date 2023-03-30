@@ -1,4 +1,4 @@
-from graph import Graph, graph_from_file, routes, routes_test, glutonny
+from graph import Graph, graph_from_file, routes, routes_test, routes_test2, glutonny
 from operator import itemgetter
 from time import perf_counter
 
@@ -11,7 +11,12 @@ camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.1.in"
 #routes(graph_path, route_path)
 g = graph_from_file(graph_path)
 k = g.kruskal()
-print(k.dfs2())
+parents = k.dfs2()
+print(parents)
+print(k.dfs(6, 11))
+print(k.saumon(parents,6,11))
+
+
 
 
 #print("finish")

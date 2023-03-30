@@ -240,14 +240,46 @@ class Graph:
             visited = set()
         visited.add(src)
         if parents is None:
-            parents = {src : [None, 0]}
+            parents = {src : [None, 0, 0]} #on stocke le parent, la puissance min et la profondeur
         for enfant in self.graph[src]:
             if enfant[0] not in visited:
-                parents[enfant[0]] = [src, enfant[1]]
+                parents[enfant[0]] = [src, enfant[1], parents[src][2] + 1]
                 self.dfs2(enfant[0], parents, visited)
         return parents
             
+    def saumon(self, parents, src, dest):
+        profondeur_src = parents[src][2]
+        profondeur_dest = parents[dest][2]
+        node_src = src
+        node_dest = dest
+        puissance_min = 0
+        chemin_src = [src]
+        chemin_dest = [dest]
+        
+        while profondeur_src > profondeur_dest:
+            puissance_min = max(puissance_min, parents[node_src][1])
+            node_src = parents[node_src][0]
+            chemin_src.append(node_src)
+            profondeur_src -= 1
 
+        while profondeur_dest > profondeur_src:
+            puissance_min = max(puissance_min, parents[node_dest][1])
+            node_dest = parents[node_dest][0]
+            chemin_dest.append(node_dest)
+            profondeur_src -= 1
+
+        while node_dest != node_src:
+            puissance_min = max(puissance_min, parents[node_src][1])
+            node_src = parents[node_src][0]
+            chemin_src.append(node_src)
+            puissance_min = max(puissance_min, parents[node_dest][1])
+            node_dest = parents[node_dest][0]
+            chemin_dest.append(node_dest)
+        
+        del chemin_dest[-1]
+        return chemin_src + chemin_dest[::-1], puissance_min   
+        
+        
 def graph_from_file(filename):
     """
     Reads a text file and returns the graph as an object of the Graph class.
@@ -319,7 +351,27 @@ def routes_test(graphe_path, route_path):
     f.close()
     h.write(str((nb_route * duration) / 60000))
     h.close
-    print((nb_route * duration) / 60000) #on retourne le temps estimé en minutes du traitement total du fichier 
+    print((nb_route * duration) / 60000) #on retourne le temps estimé en minutes du traitement total du fichier
+
+def routes_test2(graphe_path, route_path):
+    g = graph_from_file(graphe_path) #on génère le graph du fichier
+    t1_start = perf_counter() # on lance le chrono
+    kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode kruskal
+    parents = kruskal.dfs2()
+    f = open(route_path, "r") #on récupère les routes
+    h = open("/home/onyxia/work/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
+    nb_route = int(f.readline()) #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
+    for i in range(1000): #on boucle sur les lignes du fichier qui représentent des routes à tester
+        line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
+        src = int(line[0])
+        dest = int(line[1])
+        h.write(str(kruskal.saumon(parents, src, dest) + "\n"))
+    t1_stop = perf_counter() #on arrête le chrono
+    duration = t1_stop-t1_start
+    f.close()
+    h.write(str((nb_route * duration) / 60000))
+    h.close
+    print((nb_route * duration) / 60000) #on retourne le temps estimé en minutes du traitement total du fichier  
 
 """
 Q10 : notre algorithme ne fonctionne pas sur les graphes au-delà du graphe 1, car python s'arrête à cause d'une boucle trop longue
