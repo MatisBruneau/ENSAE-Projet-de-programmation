@@ -239,13 +239,54 @@ class Graph:
             visité = set()
         visité.add(src)
         if parent is None:
-            parent = {src: [None,0]}
+            parent = {src: [None,0,0]}
         for voisin in self.graph[src]:
             if voisin[0] not in visité:
-                parent[voisin[0]] = [src,voisin[1]]
+                parent[voisin[0]] = [src,voisin[1],parent[src][2]+1]
                 self.dfs2(voisin[0], parent, visité)
         return parent
 
+    def saumon(self, parent, src, dest):
+        puissance_min=0
+        racine=self.nodes[0]
+        node_src = src
+        node_dest = dest
+        chemin_src=[src]
+        chemin_dest=[dest]
+        profondeur_src= parent[src][2]
+        profondeur_dest=parent[dest][2]
+        
+        while profondeur_dest < profondeur_src:
+            profondeur_src -= 1
+            puissance_min=max(puissance_min, parent[node_src][1])
+            node_src=parent[node_src][0]
+            chemin_src.append(node_src)
+        print(chemin_src,chemin_dest)
+
+
+        while profondeur_dest > profondeur_src:
+            profondeur_dest -= 1
+            puissance_min=max(puissance_min, parent[node_dest][1])
+            node_src=parent[node_dest][0]
+            chemin_src.append(node_dest)
+        print(chemin_src,chemin_dest)
+        while node_dest != node_src:
+            puissance_min=max(puissance_min, parent[node_src][1],parent[node_dest][1])
+            node_src=parent[node_src][0]
+            chemin_src.append(node_src) 
+            node_src=parent[node_dest][0]
+            chemin_src.append(node_dest)          
+        print(chemin_src,chemin_dest)
+
+        del chemin_dest[-1]
+        chemin_dest=chemin_dest[::-1]
+        chemin=chemin_src+chemin_dest
+        return chemin, puissance_min
+
+
+
+
+    
 
 
 

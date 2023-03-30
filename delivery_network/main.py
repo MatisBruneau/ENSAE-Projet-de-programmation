@@ -16,8 +16,9 @@ print(glutonny(route_1, camion_1,budget))"""
 #print("finish")
 g = graph_from_file(graph_path)
 k = g.kruskal()
-print(k)
-print(k.dfs2())
+d=k.dfs2()
+
+print(k.saumon(d, 6, 11))
 #print(g.min_power(6, 11))
 
 #routes_test(graph_path, route_path)
