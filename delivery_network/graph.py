@@ -310,30 +310,47 @@ Q10 : notre algorithme ne fonctionne pas sur les graphes au-delà du graphe 1, c
 Q15 : en utilisant la fonction routes_test, notre programme estime mettre 110 minutes pour calculer les routes du fichier routes.2.in
 """
 def glutonny(self, path_routes_x, path_trucks_x, budget = 25e9):
-
-    #extraction de données
-    #on associe à la route son camion optimal (boucle for et while) [trajet , camion]
-    #on fait utilité/cout [trajet, optimal, coût] et on trie la liste selon 3
-    #on achète les camions de la liste jusqu'à atteindre le budget
-
+    
+#on fait utilité/cout [trajet, optimal, coût] et on trie la liste selon 3
+#on achète les camions de la liste jusqu'à atteindre le budget
     routes = open(path_routes_x, "r") #on récupère les routes
     camions = open(path_trucks_x, "r") #on récupère les camions
+    nb_routes=routes.readline() #on retire la première ligne inutile
+    nb_camions=camions.readline() #on retire la première ligne inutile
     lignes_routes = routes.readlines()
     lignes_camions = camions.readlines()
     liste_routes = []
     liste_camions = []
 
+#extraction de données
+    for ligne in lignes_routes: #liste contenant des listes représentant les routes [(src,dest),puissance_min,utilité]
+        var=ligne.split(' ')
+        var[3]=var[3].strip('\n')
+        liste_routes.append([(int(var[0]),int(var[1])),int(var[2]),int(var[3])])
+    for ligne in lignes_camions: #liste contenant les modèles de camions [puissance_min,coût]
+        var=ligne.split(' ')
+        var[1]=var[1].strip('\n')
+        liste_camions.append([int(var[0]), int(var[1])])
+    routes.close()
+    camions.close()
 
-    for ligne in ligne_routes:
-
-
-
-    for ligne in ligne_camions:
-
-    
+#liste_camions = sorted(liste_camions, key=itemgetter(1)) cela ne fait rien car on suppose que les camions sont classé par leur puissance
+#on associe à la route son camion optimal (boucle for et while) [(src,dest),puissance_min,utilité,index_camion]
+    for route in liste_routes :
+        puissance_min_nécessaire=route[1]
+        i=0
+        if liste_camions[-1][0] < puissance_min_nécessaire: #on vérifie si au moins un camion correspond
+            route.append(None)
+        else:
+            while liste_camions[i][0]<puissance_min_nécessaire : #on retire les camions n'ayant pas la puissance _min_nécessaire
+                i += 1
+            camions_candidat=liste_camions[i:]
+            valeur_min = min(camions_candidat, key = lambda x: x[1]) #on prend le camion ayant le coût minimal
+            camion_optimal=liste_camions.index(valeur_min) #on ajoute l'index du camion en sachant que c'est -2 par rapport au document out
+            route.append(camion_optimal) #on a maintenant [(src,dest),puissance, utilité,camion optimal    
 
     for trajet in liste_routes : # on ajoute le rapport utilité/cout à la liste des routes
-        if trajet[2] != 0 :
+        if trajet[2] != None :
         trajet.append(trajet[2] / liste_camions[trajet[3]][1])
         else :
             trajet.append(0)
