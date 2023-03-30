@@ -9,25 +9,10 @@ route_1 = "/home/onyxia/ENSAE-Projet-de-programmation/output/route.1.out"
 camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.1.in"
 
 #routes(graph_path, route_path)
-g = graph_from_file(graph_path)
-k = g.kruskal()
-parents = k.dfs2()
-print(parents)
-print(k.dfs(6, 11))
-print(k.saumon(parents,6,11))
-
-
-
-
 #print("finish")
-
 #g = graph_from_file(graph_path)
-
 #print(g.min_power(6, 11))
-
-
-
-#routes_test(graph_path, route_path)
+routes_test2(graph_path, route_path)
 
 
 

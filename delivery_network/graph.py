@@ -279,7 +279,7 @@ class Graph:
         del chemin_dest[-1]
         return chemin_src + chemin_dest[::-1], puissance_min   
         
-        
+
 def graph_from_file(filename):
     """
     Reads a text file and returns the graph as an object of the Graph class.
@@ -359,13 +359,13 @@ def routes_test2(graphe_path, route_path):
     kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode kruskal
     parents = kruskal.dfs2()
     f = open(route_path, "r") #on récupère les routes
-    h = open("/home/onyxia/work/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
+    h = open("/home/onyxia/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
     nb_route = int(f.readline()) #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
-    for i in range(1000): #on boucle sur les lignes du fichier qui représentent des routes à tester
+    for i in range(100): #on boucle sur les lignes du fichier qui représentent des routes à tester
         line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
         src = int(line[0])
         dest = int(line[1])
-        h.write(str(kruskal.saumon(parents, src, dest) + "\n"))
+        h.write(str(kruskal.saumon(parents, src, dest)) + "\n")
     t1_stop = perf_counter() #on arrête le chrono
     duration = t1_stop-t1_start
     f.close()
