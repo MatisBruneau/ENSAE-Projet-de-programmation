@@ -333,18 +333,27 @@ def glutonny(self, path_routes_x, path_trucks_x, budget = 25e9):
     
 
     for trajet in liste_routes : # on ajoute le rapport utilité/cout à la liste des routes
+        if trajet[2] != 0 :
         trajet.append(trajet[2] / liste_camions[trajet[3]][1])
+        else :
+            trajet.append(0)
     
     liste_routes.sort(key = itemgetter(5)) # on trie la liste en fonction du rapport précédent
 
     nb_routes = len(liste_routes)
-    budget_ok = 1
+    budget = 25e9
     index = 0
-    achat_camion
-    while budget_ok and (nb_routes > 0):
+    achat_camion = []
+    while budget > 0 and (index <= len(liste_routes)) and (liste_routes[index+1][5] > 0): #tant que le budget n'est pas épuisé, qu'on a pas fait toutes les routes et que les prochaines routes sont faisables
+        achat_camion.append(liste_routes[index][3], (liste_routes[index][0], liste_routes[index][1])) # on ajoute à la liste des achats de camion un camion et son trajet
+        budget = budget - liste_camions[liste_routes[index][3]][1] # on l'enlève du budget
+        index += 1 #on augmente l'index
 
+    if budget < 0 : #si le dernier camion était trop cher on le "rend"
+        budget = budget + liste_camions[liste_routes[index][3]][1]
+        del achat_camion[-1]
 
-
+    return achat_camion
 
 
     
