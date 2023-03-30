@@ -1,4 +1,4 @@
-from graph import Graph, graph_from_file, routes, routes_test
+from graph import Graph, graph_from_file, routes, routes_test, glutonny
 from operator import itemgetter
 from time import perf_counter
 
