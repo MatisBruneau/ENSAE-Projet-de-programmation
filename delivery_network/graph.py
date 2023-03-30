@@ -312,15 +312,13 @@ Q15 : en utilisant la fonction routes_test, notre programme estime mettre 110 mi
 
 def glutonny(path_routes_x, path_trucks_x,budget):
 
-    
-    
     #on fait utilité/cout [trajet, optimal, coût] et on trie la liste selon 3
     #on achète les camions de la liste jusqu'à atteindre le budget
 
     routes = open(path_routes_x, "r") #on récupère les routes
     camions = open(path_trucks_x, "r") #on récupère les camions
     nb_routes=routes.readline() #on retire la première ligne inutile
-    nb_camions=camions.readline()
+    nb_camions=camions.readline() #on retire la première ligne inutile
     lignes_routes = routes.readlines()
     lignes_camions = camions.readlines()
     liste_routes = []
@@ -344,14 +342,41 @@ def glutonny(path_routes_x, path_trucks_x,budget):
     for route in liste_routes :
         puissance_min_nécessaire=route[1]
         i=0
-        while liste_camions[i][0]<puissance_min_nécessaire : #on retire les camions n'ayant pas la puissance _min_nécessaire
-            i += 1
-        camions_candidat=liste_camions[i:]
-        valeur_min = min(camions_candidat, key = lambda x: x[1]) #on prend le camion ayant le coût minimal 
-        camion_optimal=liste_camions.index(valeur_min) #on ajoute l'index du camion en sachant que c'est -2 par rapport au document out
-        route.append(camion_optimal)
-        
-        print(liste_camions,liste_routes)
+ 
+        if liste_camions[-1][0] < puissance_min_nécessaire: #on vérifie si au moins un camion correspond
+            route.append(None)
+        else:
+            while liste_camions[i][0]<puissance_min_nécessaire : #on retire les camions n'ayant pas la puissance _min_nécessaire
+                    i += 1 
+
+            camions_candidat=liste_camions[i:]
+            valeur_min = min(camions_candidat, key = lambda x: x[1]) #on prend le camion ayant le coût minimal 
+            camion_optimal=liste_camions.index(valeur_min) #on ajoute l'index du camion en sachant que c'est -2 par rapport au document out
+            route.append(camion_optimal) #on a maintenant [(src,dest),puissance, utilité,camion optimal]
+
+
+    for trajet in liste_routes : # on ajoute le rapport utilité/cout à la liste des routes
+        if trajet[2] != None :
+            trajet.append(trajet[2] / liste_camions[trajet[3]][1])
+        else :
+            trajet.append(0)
+    
+    liste_routes.sort(key = itemgetter(4)) # on trie la liste en fonction du rapport précédent
+
+    nb_routes = len(liste_routes)
+    budget = 25e9
+    index = 0 
+    achat_camion = []
+    while budget > 0 and (index < len(liste_routes)) and (liste_routes[index][4] > 0): #tant que le budget n'est pas épuisé, qu'on a pas fait toutes les routes et que les prochaines routes sont faisables
+        achat_camion.append([liste_routes[index][3], liste_routes[index][0]]) # on ajoute à la liste des achats de camion un camion et son trajet
+        budget = budget - liste_camions[liste_routes[index][3]][1] # on l'enlève du budget
+        index += 1 #on augmente l'index
+
+    if budget < 0 : #si le dernier camion était trop cher on le "rend"
+        budget = budget + liste_camions[liste_routes[index][3]][1]
+        del achat_camion[-1]
+
+    return achat_camion
 
         
 

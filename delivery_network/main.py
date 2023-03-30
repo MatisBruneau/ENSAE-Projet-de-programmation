@@ -10,7 +10,7 @@ camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.1.in"
 budget = 25*10^9
 
 routes(graph_path, route_path)
-glutonny(route_1, camion_1,budget)
+print(glutonny(route_1, camion_1,budget))
 
 
 #print("finish")
