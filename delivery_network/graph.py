@@ -248,6 +248,9 @@ class Graph:
         return parents
             
     def saumon(self, parents, src, dest):
+        if (src not in parents.keys()) or (dest not in parents.keys()):
+            return None, None
+
         profondeur_src = parents[src][2]
         profondeur_dest = parents[dest][2]
         node_src = src
@@ -263,10 +266,10 @@ class Graph:
             profondeur_src -= 1
 
         while profondeur_dest > profondeur_src:
-            puissance_min = max(puissance_min, parents[node_dest][1])
+            puissance_min = max(puissance_min, parents[node_dest][1])           
             node_dest = parents[node_dest][0]
             chemin_dest.append(node_dest)
-            profondeur_src -= 1
+            profondeur_dest -= 1
 
         while node_dest != node_src:
             puissance_min = max(puissance_min, parents[node_src][1])
@@ -333,15 +336,32 @@ def routes(graphe_path, route_path):
     f.close()
     h.close()
 
+def routes2(graphe_path, route_path):
+    g = graph_from_file(graphe_path) #on génère le graph du fichier
+    kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode kruskal
+    parents = kruskal.dfs2() #on récupère le dictionnaire des parents
+    f = open(route_path, "r") #on récupère les routes
+    h = open("/home/onyxia/ENSAE-Projet-de-programmation/output/route.6.out", "w") #on génère un fichier qui contiendra les résultats
+    nb_route = f.readline() #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
+    for i in range(int(nb_route) - 1): #on boucle sur les lignes du fichier qui représentent des routes à tester
+        print(i)
+        line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
+        src = int(line[0])
+        dest = int(line[1])
+        h.write(line[0] + " " + line[1] + " " + str(kruskal.saumon(parents, src, dest)[1]) + " " + line[2] + "\n") #on note dans le fichier de sorti la puissance minimale qui est calculé en appliquant la méthode dfs à l'arbre
+    f.close()
+    h.close()
+
+
 
 def routes_test(graphe_path, route_path):
     g = graph_from_file(graphe_path) #on génère le graph du fichier
     t1_start = perf_counter() # on lance le chrono
     kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode kruskal
     f = open(route_path, "r") #on récupère les routes
-    h = open("/home/onyxia/work/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
+    h = open("/home/onyxia/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
     nb_route = int(f.readline()) #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
-    for i in range(1000): #on boucle sur les lignes du fichier qui représentent des routes à tester
+    for i in range(100): #on boucle sur les lignes du fichier qui représentent des routes à tester
         line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
         src = int(line[0])
         dest = int(line[1])
@@ -361,7 +381,7 @@ def routes_test2(graphe_path, route_path):
     f = open(route_path, "r") #on récupère les routes
     h = open("/home/onyxia/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
     nb_route = int(f.readline()) #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
-    for i in range(100): #on boucle sur les lignes du fichier qui représentent des routes à tester
+    for i in range(1000): #on boucle sur les lignes du fichier qui représentent des routes à tester
         line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
         src = int(line[0])
         dest = int(line[1])
