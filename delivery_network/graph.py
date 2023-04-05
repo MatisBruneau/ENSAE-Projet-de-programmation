@@ -261,22 +261,21 @@ class Graph:
             puissance_min=max(puissance_min, parent[node_src][1])
             node_src=parent[node_src][0]
             chemin_src.append(node_src)
-        print(chemin_src,chemin_dest)
-
 
         while profondeur_dest > profondeur_src:
             profondeur_dest -= 1
             puissance_min=max(puissance_min, parent[node_dest][1])
             node_src=parent[node_dest][0]
             chemin_src.append(node_dest)
-        print(chemin_src,chemin_dest)
+
+
         while node_dest != node_src:
             puissance_min=max(puissance_min, parent[node_src][1],parent[node_dest][1])
             node_src=parent[node_src][0]
             chemin_src.append(node_src) 
             node_src=parent[node_dest][0]
             chemin_src.append(node_dest)          
-        print(chemin_src,chemin_dest)
+
 
         del chemin_dest[-1]
         chemin_dest=chemin_dest[::-1]
