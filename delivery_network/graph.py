@@ -443,7 +443,7 @@ def glutonny(path_routes_x, path_trucks_x, budget = 25e9):
         else :
             trajet.append(0)
     
-    liste_routes.sort(key = itemgetter(4)) # on trie la liste en fonction du rapport précédent
+    liste_routes.sort(key = itemgetter(4), reverse=True) # on trie la liste en fonction du rapport précédent
 
     nb_routes = len(liste_routes)
     budget = 25e9
