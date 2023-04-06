@@ -395,9 +395,10 @@ def routes_test2(graphe_path, route_path):
     duration_dfs = t1_stop-t1_start
     duration_routes = t2_stop-t2_start
     f.close()
-    h.write(str(duration_dfs + (nb_route * duration_routes) / 1000))​
+    h.write(str(duration_dfs + (nb_route * duration_routes) / 1000))
+    h.close()
 
-
+    
 """
 Q10 : notre algorithme ne fonctionne pas sur les graphes au-delà du graphe 1, car python s'arrête à cause d'une boucle trop longue
 Q15 : en utilisant la fonction routes_test, notre programme estime mettre 110 minutes pour calculer les routes du fichier routes.2.in

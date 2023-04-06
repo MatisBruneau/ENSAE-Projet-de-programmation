@@ -10,12 +10,13 @@ camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.0.in"
 
 #routes(graph_path, route_path)
 #print("finish")
-#g = graph_from_file(graph_path)
+g = graph_from_file(graph_path)
+print(g.connected_components_set())
 #k = g.kruskal()
 #parents = k.dfs2()
 #print(k.saumon(parents, 2, 103))
 #print(g.min_power(2, 103))
-print(glutonny(route_1, camion_1))
+#print(glutonny(route_1, camion_1))
 
 
 
