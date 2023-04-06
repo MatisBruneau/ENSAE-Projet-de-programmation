@@ -341,7 +341,7 @@ def routes2(graphe_path, route_path):
     kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode kruskal
     parents = kruskal.dfs2() #on récupère le dictionnaire des parents
     f = open(route_path, "r") #on récupère les routes
-    h = open("/home/onyxia/ENSAE-Projet-de-programmation/output/route.6.out", "w") #on génère un fichier qui contiendra les résultats
+    h = open("/home/onyxia/ENSAE-Projet-de-programmation/output/route.x.out", "w") #on génère un fichier qui contiendra les résultats
     nb_route = f.readline() #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
     for i in range(int(nb_route) - 1): #on boucle sur les lignes du fichier qui représentent des routes à tester
         print(i)
@@ -447,20 +447,22 @@ def glutonny(path_routes_x, path_trucks_x, budget = 25e9):
 
     nb_routes = len(liste_routes)
     budget = 25e9
-    index = 0
     achat_camion = []
-    while budget > 0 and (index < len(liste_routes)) and (liste_routes[index][4] > 0): #tant que le budget n'est pas épuisé, qu'on a pas fait toutes les routes et que les prochaines routes sont faisables
-        achat_camion.append([liste_routes[index][3], liste_routes[index][0]]) # on ajoute à la liste des achats de camion un camion et son trajet
-        budget = budget - liste_camions[liste_routes[index][3]][1] # on l'enlève du budget
-        index += 1 #on augmente l'index
+    utilité=0
+    for route in liste_routes:
+        if budget >0 and route[4]>0:
+            achat_camion.append([route[3], route[0]]) # on ajoute à la liste des achats de camion un camion et son trajet
+            budget = budget - liste_camions[route[3]][1] # on l'enlève du budget
+            utilité += route[2]
 
-    if budget < 0 : #si le dernier camion était trop cher on le "rend"
-        budget = budget + liste_camions[liste_routes[index][3]][1]
-        del achat_camion[-1]
+    return achat_camion, utilité
 
-    return achat_camion
-
-
+def glutotest(path_routes,path_trucks):
+    t1_start = perf_counter() # on lance le chrono
+    test=glutonny(path_routes, path_trucks)
+    t1_stop = perf_counter() #on arrête le chrono
+    duration = t1_stop-t1_start
+    return duration
     
 
 # Méthodes non-utilisées dans le programme:
