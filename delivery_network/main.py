@@ -16,7 +16,7 @@ camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.2.in"
 #print(k.saumon(parents, 2, 103))
 #print(g.min_power(2, 103))
 #print(glutonny(route_1, camion_1))
-print(glutotest(route_1, camion_1))
+
 
 
 

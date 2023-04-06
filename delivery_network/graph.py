@@ -457,12 +457,6 @@ def glutonny(path_routes_x, path_trucks_x, budget = 25e9):
 
     return achat_camion, utilité
 
-def glutotest(path_routes,path_trucks):
-    t1_start = perf_counter() # on lance le chrono
-    test=glutonny(path_routes, path_trucks)
-    t1_stop = perf_counter() #on arrête le chrono
-    duration = t1_stop-t1_start
-    return duration
     
 
 # Méthodes non-utilisées dans le programme:
