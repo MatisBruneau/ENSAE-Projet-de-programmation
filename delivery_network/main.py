@@ -1,12 +1,12 @@
-from graph import Graph, graph_from_file, routes, routes2, routes_test, routes_test2, glutonny, glutotest
+from graph import Graph, graph_from_file, routes, routes2, routes_test, routes_test2, glutonny
 from operator import itemgetter
 from time import perf_counter
 
 #data_path = "/home/onyxia/work/ENSAE-Projet-de-programmation/input/"
 graph_path = "/home/onyxia/ENSAE-Projet-de-programmation/input/network.4.in"
 route_path = "/home/onyxia/ENSAE-Projet-de-programmation/input/routes.4.in"
-route_1 = "/home/onyxia/ENSAE-Projet-de-programmation/output/route.4.out"
-camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.2.in"
+route_1 = "/home/onyxia/ENSAE-Projet-de-programmation/output/route.6.out"
+camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.0.in"
 
 #routes(graph_path, route_path)
 #print("finish")
@@ -15,7 +15,7 @@ camion_1 = "/home/onyxia/ENSAE-Projet-de-programmation/input/trucks.2.in"
 #parents = k.dfs2()
 #print(k.saumon(parents, 2, 103))
 #print(g.min_power(2, 103))
-#print(glutonny(route_1, camion_1))
+print(glutonny(route_1, camion_1))
 
 
 

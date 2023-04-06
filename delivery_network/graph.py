@@ -373,25 +373,30 @@ def routes_test(graphe_path, route_path):
     h.close
     print((nb_route * duration) / 60000) #on retourne le temps estimé en minutes du traitement total du fichier
 
+
 def routes_test2(graphe_path, route_path):
+
     g = graph_from_file(graphe_path) #on génère le graph du fichier
     t1_start = perf_counter() # on lance le chrono
-    kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode kruskal
+    kruskal = g.kruskal() #on récupère le minimal spanning tree en appliquant la méthode 
+    t1_stop = perf_counter()
     parents = kruskal.dfs2()
     f = open(route_path, "r") #on récupère les routes
     h = open("/home/onyxia/ENSAE-Projet-de-programmation/output/route.test.out", "w") #on génère un fichier qui contiendra les résultats
+    t2_start = perf_counter()
     nb_route = int(f.readline()) #on récupère le nombre de routes qui se trouve sur la première ligne du fichier
     for i in range(1000): #on boucle sur les lignes du fichier qui représentent des routes à tester
         line = f.readline().split() #on split les lignes pour avoir une liste contenant la source la destination et l'utilité
         src = int(line[0])
         dest = int(line[1])
         h.write(str(kruskal.saumon(parents, src, dest)) + "\n")
-    t1_stop = perf_counter() #on arrête le chrono
-    duration = t1_stop-t1_start
+    
+    t2_stop = perf_counter() #on arrête le chrono
+    duration_dfs = t1_stop-t1_start
+    duration_routes = t2_stop-t2_start
     f.close()
-    h.write(str((nb_route * duration) / 60000))
-    h.close
-    print((nb_route * duration) / 60000) #on retourne le temps estimé en minutes du traitement total du fichier  
+    h.write(str(duration_dfs + (nb_route * duration_routes) / 1000))​
+
 
 """
 Q10 : notre algorithme ne fonctionne pas sur les graphes au-delà du graphe 1, car python s'arrête à cause d'une boucle trop longue
@@ -437,8 +442,9 @@ def glutonny(path_routes_x, path_trucks_x, budget = 25e9):
             camion_optimal=liste_camions.index(valeur_min) #on ajoute l'index du camion en sachant que c'est -2 par rapport au document out
             route.append(camion_optimal) #on a maintenant [(src,dest),puissance, utilité,camion optimal    
 
+
     for trajet in liste_routes : # on ajoute le rapport utilité/cout à la liste des routes
-        if trajet[2] != None :
+        if trajet[2] != None and trajet[3] !=None:
             trajet.append(trajet[2] / liste_camions[trajet[3]][1])
         else :
             trajet.append(0)
