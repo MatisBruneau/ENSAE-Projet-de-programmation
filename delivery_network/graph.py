@@ -247,11 +247,11 @@ class Graph:
                 self.dfs2(enfant[0], parents, visited)
         return parents
             
-    def saumon(self, parents, src, dest):
-        if (src not in parents.keys()) or (dest not in parents.keys()):
+    def saumon(self, parents, src, dest): #il s'agit de la fonctin qui remonte le dictionnaire parents pour trouver le chemin entre la source et la destination
+        if (src not in parents.keys()) or (dest not in parents.keys()): #on renvoie None si un des deux noeuds n'existe pas
             return None, None
 
-        profondeur_src = parents[src][2]
+        profondeur_src = parents[src][2] #on récupère les profondeurs des trajets pour les égaliser
         profondeur_dest = parents[dest][2]
         node_src = src
         node_dest = dest
@@ -259,19 +259,19 @@ class Graph:
         chemin_src = [src]
         chemin_dest = [dest]
         
-        while profondeur_src > profondeur_dest:
+        while profondeur_src > profondeur_dest: #on égalise les profondeurs
             puissance_min = max(puissance_min, parents[node_src][1])
             node_src = parents[node_src][0]
             chemin_src.append(node_src)
             profondeur_src -= 1
 
-        while profondeur_dest > profondeur_src:
+        while profondeur_dest > profondeur_src: #on égalise les profondeurs
             puissance_min = max(puissance_min, parents[node_dest][1])           
             node_dest = parents[node_dest][0]
             chemin_dest.append(node_dest)
             profondeur_dest -= 1
 
-        while node_dest != node_src:
+        while node_dest != node_src: #une fois que les profondeurs sont égalisées, on remonte les parents jusqu'à tomber sur un noeud commun (le noeud qui a servi de source lors de la création de parents l'est toujours, donc la boucle s'arrêtera forcément)
             puissance_min = max(puissance_min, parents[node_src][1])
             node_src = parents[node_src][0]
             chemin_src.append(node_src)
@@ -279,8 +279,8 @@ class Graph:
             node_dest = parents[node_dest][0]
             chemin_dest.append(node_dest)
         
-        del chemin_dest[-1]
-        return chemin_src + chemin_dest[::-1], puissance_min   
+        del chemin_dest[-1] #on supprime le dernier élément de chemin_dest pour ne pas avoir de répétition à la fin
+        return chemin_src + chemin_dest[::-1], puissance_min  #on concatène les deux chemins en retournant chemin_dest
         
 
 def graph_from_file(filename):
